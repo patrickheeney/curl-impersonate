@@ -114,6 +114,9 @@ RUN cd ${CURL_VERSION} && \
                 USE_CURL_SSLKEYLOGFILE=true && \
     make clean && make && make install
 
+RUN ls -al /build/install/
+RUN ls -al /build/install/lib/
+
 # Copy libcurl-impersonate and symbolic links
 RUN cp -d /build/install/lib/libcurl-impersonate* /build/out
 
@@ -147,3 +150,4 @@ RUN ldconfig
 COPY --from=builder /build/out /build/out
 # Wrapper scripts
 COPY --from=builder /build/out/curl_* /usr/local/bin/
+
