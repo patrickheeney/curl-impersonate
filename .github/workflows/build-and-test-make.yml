@@ -241,7 +241,7 @@ jobs:
         if: startsWith(github.ref, 'refs/tags/')
         run: |
           cd ${{ runner.temp }}/install/bin
-          tar -c -z -f ${{ runner.temp }}/curl-impersonate-${{ github.ref_name }}.${{ matrix.host }}.tar.gz curl-impersonate-ff curl-impersonate-chrome curl_*
+          tar -c -z -f ${{ runner.temp }}/curl-impersonate-${{ github.ref_name }}.${{ matrix.host }}.tar.gz curl-impersonate-ff curl-impersonate-chrome curl-impersonate-chrome-config curl_*
           echo "release_file_bin=${{ runner.temp }}/curl-impersonate-${{ github.ref_name }}.${{ matrix.host }}.tar.gz" >> $GITHUB_ENV
 
       - name: Upload release files
