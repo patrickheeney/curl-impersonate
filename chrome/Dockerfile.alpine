@@ -95,7 +95,7 @@ RUN mkdir out && \
     cp /build/install/bin/curl-impersonate-chrome out/ && \
     ln -s curl-impersonate-chrome out/curl-impersonate && \
     cp /build/install/bin/curl-impersonate-chrome-config out/ && \
-    ln -s curl-impersonate-chrome-config out/curl-config && \
+    ln -s curl-impersonate-chrome-config out/curl-impersonate-config && \
     strip out/curl-impersonate
 
 # Verify that the resulting 'curl' has all the necessary features.
@@ -104,11 +104,11 @@ RUN ./out/curl-impersonate -V | grep -q zlib && \
     ./out/curl-impersonate -V | grep -q nghttp2 && \
     ./out/curl-impersonate -V | grep -q -e NSS -e BoringSSL
 
-RUN ./out/curl-impersonate-chrome-config --version && \
-    ./out/curl-impersonate-chrome-config --libs && \
-    ./out/curl-impersonate-chrome-config --static-libs && \
-    ./out/curl-impersonate-chrome-config --prefix && \
-    ./out/curl-impersonate-chrome-config --cflags
+RUN ./out/curl-impersonate-config --version | grep -q libcurl && \
+    ./out/curl-impersonate-config --libs | grep -q -e brotli -e bghttp2 && \
+    ./out/curl-impersonate-config --static-libs | grep -q -e brotli -e bghttp2 && \
+    ./out/curl-impersonate-config --prefix | grep -q \/build\/install && \
+    ./out/curl-impersonate-config --cflags | grep -q CURL_STATICLIB
 
 # Verify that the resulting 'curl' is really statically compiled
 RUN ! (ldd ./out/curl-impersonate | grep -q -e libcurl -e nghttp2 -e brotli -e ssl -e crypto)
