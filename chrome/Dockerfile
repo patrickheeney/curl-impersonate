@@ -99,7 +99,6 @@ RUN mkdir out && \
     ln -s curl-impersonate-chrome out/curl-impersonate && \
     cp /build/install/bin/curl-impersonate-chrome-config out/ && \
     ln -s curl-impersonate-chrome-config out/curl-config && \
-    strip out/curl-config && \
     strip out/curl-impersonate
 
 # Verify that the resulting 'curl' has all the necessary features.
