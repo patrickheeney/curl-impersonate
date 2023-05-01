@@ -153,6 +153,9 @@ RUN cd ${CURL_VERSION} && \
                 USE_CURL_SSLKEYLOGFILE=true && \
     make && make install
 
+RUN ls -al /build/install/
+RUN ls -al /build/install/bin/
+
 RUN mkdir out && \
 {{#firefox}}
     cp /build/install/bin/curl-impersonate-ff out/ && \
@@ -161,6 +164,9 @@ RUN mkdir out && \
 {{#chrome}}
     cp /build/install/bin/curl-impersonate-chrome out/ && \
     ln -s curl-impersonate-chrome out/curl-impersonate && \
+    cp /build/install/bin/curl-impersonate-chrome-config out/ && \
+    ln -s curl-impersonate-chrome-config out/curl-impersonate-chrome-config && \
+    strip out/curl-impersonate-chrome-config && \
 {{/chrome}}
     strip out/curl-impersonate
 
@@ -169,6 +175,14 @@ RUN ./out/curl-impersonate -V | grep -q zlib && \
     ./out/curl-impersonate -V | grep -q brotli && \
     ./out/curl-impersonate -V | grep -q nghttp2 && \
     ./out/curl-impersonate -V | grep -q -e NSS -e BoringSSL
+
+{{#chrome}}
+RUN ./out/curl-impersonate-chrome-config --version && \
+    ./out/curl-impersonate-chrome-config --libs && \
+    ./out/curl-impersonate-chrome-config --static-libs && \
+    ./out/curl-impersonate-chrome-config --prefix && \
+    ./out/curl-impersonate-chrome-config --cflags
+{{/chrome}}
 
 # Verify that the resulting 'curl' is really statically compiled
 RUN ! (ldd ./out/curl-impersonate | grep -q -e libcurl -e nghttp2 -e brotli -e ssl -e crypto)

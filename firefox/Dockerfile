@@ -87,6 +87,9 @@ RUN cd ${CURL_VERSION} && \
                 USE_CURL_SSLKEYLOGFILE=true && \
     make && make install
 
+RUN ls -al /build/install/
+RUN ls -al /build/install/bin/
+
 RUN mkdir out && \
     cp /build/install/bin/curl-impersonate-ff out/ && \
     ln -s curl-impersonate-ff out/curl-impersonate && \
@@ -97,6 +100,7 @@ RUN ./out/curl-impersonate -V | grep -q zlib && \
     ./out/curl-impersonate -V | grep -q brotli && \
     ./out/curl-impersonate -V | grep -q nghttp2 && \
     ./out/curl-impersonate -V | grep -q -e NSS -e BoringSSL
+
 
 # Verify that the resulting 'curl' is really statically compiled
 RUN ! (ldd ./out/curl-impersonate | grep -q -e libcurl -e nghttp2 -e brotli -e ssl -e crypto)
